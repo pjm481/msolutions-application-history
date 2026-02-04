@@ -75,6 +75,8 @@ const App = () => {
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
   const [ownerList, setOwnerList] = React.useState([]);
+  // All users (active + inactive) for filter dropdown and resolving owner names in table
+  const [allUsersList, setAllUsersList] = React.useState([]);
   // Owner filter: no default (do not filter by logged-in user); user selects manually when needed
   const [selectedOwner, setSelectedOwner] = React.useState(null);
   const [typeList, setTypeList] = React.useState([]);
@@ -168,13 +170,14 @@ const App = () => {
       const usersResponse = await ZOHO.CRM.API.getAllUsers({
         Type: "AllUsers",
       });
-      const validUsers = usersResponse?.users?.filter(
-        (user) =>
-          user?.full_name &&
-          user?.id &&
-          (user?.status === "active" || user?.status === undefined)
+      const allUsersForFilter = usersResponse?.users?.filter(
+        (user) => user?.full_name && user?.id
       );
-      setOwnerList(validUsers || []);
+      const activeUsersForAssignment = (allUsersForFilter || []).filter(
+        (user) => user?.status === "active" || user?.status === undefined
+      );
+      setAllUsersList(allUsersForFilter || []);
+      setOwnerList(activeUsersForAssignment || []);
 
       const getOwnerDisplayName = (owner, users) => {
         if (owner == null) return "Unknown Owner";
@@ -239,7 +242,7 @@ const App = () => {
           regarding: obj?.Regarding || "No Regarding",
           details: obj?.History_Details || "No Details",
           icon: <DownloadIcon />,
-          ownerName: getOwnerDisplayName(obj?.Owner, validUsers),
+          ownerName: getOwnerDisplayName(obj?.Owner, allUsersForFilter),
           stakeHolder: mappedStakeHolder,
           currentData: currentModuleData
         };
@@ -644,7 +647,7 @@ const App = () => {
               />
               <Autocomplete
                 size="small"
-                options={ownerList || []}
+                options={allUsersList || []}
                 getOptionLabel={(option) => option?.full_name || "Unknown User"}
                 value={selectedOwner || null}
                 isOptionEqualToValue={(option, value) =>
@@ -846,7 +849,7 @@ const App = () => {
               />
               <Autocomplete
                 size="small"
-                options={ownerList || []}
+                options={allUsersList || []}
                 getOptionLabel={(option) => option?.full_name || "Unknown User"}
                 value={selectedOwner || null}
                 isOptionEqualToValue={(option, value) =>
