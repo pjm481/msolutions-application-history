@@ -539,8 +539,8 @@ const App = () => {
                   if (!option) return "";
                   if (option?.label) return option.label;
                   if (option?.startDate && option?.endDate) {
-                    const start = dayjs(option.startDate).format("DD/MM/YYYY");
-                    const end = dayjs(option.endDate).format("DD/MM/YYYY");
+                    const start = dayjs(option.startDate).format("DD-MM-YYYY");
+                    const end = dayjs(option.endDate).format("DD-MM-YYYY");
                     return `Custom: ${start} - ${end}`;
                   }
                   return "";
@@ -776,8 +776,8 @@ const App = () => {
                   if (!option) return "";
                   if (option?.label) return option.label;
                   if (option?.startDate && option?.endDate) {
-                    const start = dayjs(option.startDate).format("DD/MM/YYYY");
-                    const end = dayjs(option.endDate).format("DD/MM/YYYY");
+                    const start = dayjs(option.startDate).format("DD-MM-YYYY");
+                    const end = dayjs(option.endDate).format("DD-MM-YYYY");
                     return `Custom: ${start} - ${end}`;
                   }
                   return "";
@@ -923,7 +923,7 @@ const App = () => {
                           <TableCell>
                             {row.date_time
                               ? dayjs(row.date_time).format(
-                                  "DD/MM/YYYY HH:mm A"
+                                  "DD-MM-YYYY HH:mm A"
                                 )
                               : "No Date"}
                           </TableCell>
@@ -1006,6 +1006,7 @@ const App = () => {
                   onChange={(newValue) =>
                     setCustomRange((prev) => ({ ...prev, startDate: newValue }))
                   }
+                  format="DD-MM-YYYY"
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -1034,6 +1035,7 @@ const App = () => {
                   onChange={(newValue) =>
                     setCustomRange((prev) => ({ ...prev, endDate: newValue }))
                   }
+                  format="DD-MM-YYYY"
                   renderInput={(params) => (
                     <TextField
                       {...params}

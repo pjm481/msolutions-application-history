@@ -793,7 +793,7 @@ export function Dialog({
                       onChange={(newValue) =>
                         handleInputChange("date_time", newValue || dayjs())
                       }
-                      format="DD/MM/YYYY hh:mm A"
+                      format="DD-MM-YYYY hh:mm A"
                       sx={{
                         // bgcolor: "green",
                         "& .MuiInputBase-input": {
